@@ -4,7 +4,6 @@ const ToggleMaskingButton = require('./ToggleMaskingButton');
 
 let masked = false;
 
-// Function to inject buttons into each child of the listbox
 function injectButtons() {
   const listbox = document.querySelector('div[role="listbox"][aria-label="Key-value pairs"]');
 
@@ -14,17 +13,19 @@ function injectButtons() {
     return;
   }
 
-  // Iterate over each child and inject a button
-  listbox.childNodes.forEach((child, index) => {
-    // Ensure we don't inject multiple buttons
-    if (child.querySelector('.masking-button-container')) return;
+  listbox.childNodes.forEach((child) => {
+    // Find the toolbar inside each listbox item
+    const toolbar = child.querySelector('div[role="toolbar"][aria-orientation="horizontal"]');
+    if (!toolbar) return;
 
-    // Create a new container for the button
+    // Avoid adding duplicate buttons
+    if (toolbar.querySelector('.masking-button-container')) return;
+
     const container = document.createElement('div');
     container.className = 'masking-button-container';
 
     // Insert the container inside the child (adjust as needed)
-    child.appendChild(container);
+    toolbar.appendChild(container); // Insert into toolbar
 
     // Render the React button inside the container
     const root = ReactDOM.createRoot(container);
@@ -40,5 +41,4 @@ function injectButtons() {
   });
 }
 
-// Run injection when Insomnia loads
 setTimeout(injectButtons, 1000);
