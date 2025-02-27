@@ -1,41 +1,44 @@
 const React = require('react');
-const ReactDOM = require('react-dom/client'); // Ensure correct ReactDOM import
+const ReactDOM = require('react-dom/client');
 const ToggleMaskingButton = require('./ToggleMaskingButton');
 
 let masked = false;
 
-// Function to inject the button into the toolbar
-function injectButton() {
-  // Find the toolbar element
-  const toolbar = document.querySelector('div[role="toolbar"][aria-orientation="horizontal"]');
+// Function to inject buttons into each child of the listbox
+function injectButtons() {
+  const listbox = document.querySelector('div[role="listbox"][aria-label="Key-value pairs"]');
 
-  if (!toolbar) {
-    console.warn('Toolbar not found. Retrying...');
-    setTimeout(injectButton, 500); // Retry if toolbar isn't loaded yet
+  if (!listbox) {
+    console.warn('Listbox not found. Retrying...');
+    setTimeout(injectButtons, 500);
     return;
   }
 
-  let container = document.getElementById('masking-button-container');
-  if (!container) {
-    // Create a new container to hold the masking button
-    container = document.createElement('div');
-    container.id = 'masking-button-container';
-    // Insert the container at the end of the toolbar
-    toolbar.append(container);
-  }
+  // Iterate over each child and inject a button
+  listbox.childNodes.forEach((child, index) => {
+    // Ensure we don't inject multiple buttons
+    if (child.querySelector('.masking-button-container')) return;
 
-  // Ensure React can render inside the container
-  const root = ReactDOM.createRoot(container);
-  root.render(
-      React.createElement(ToggleMaskingButton, {
-        onToggle: () => {
-          masked = !masked;
-          alert(`Masking is now ${masked ? 'enabled' : 'disabled'}`);
-        },
-        masked,
-      })
-  );
+    // Create a new container for the button
+    const container = document.createElement('div');
+    container.className = 'masking-button-container';
+
+    // Insert the container inside the child (adjust as needed)
+    child.appendChild(container);
+
+    // Render the React button inside the container
+    const root = ReactDOM.createRoot(container);
+    root.render(
+        React.createElement(ToggleMaskingButton, {
+          onToggle: () => {
+            masked = !masked;
+            alert(`Masking is now ${masked ? 'enabled' : 'disabled'}`);
+          },
+          masked,
+        })
+    );
+  });
 }
 
 // Run injection when Insomnia loads
-setTimeout(injectButton, 1000);
+setTimeout(injectButtons, 1000);
