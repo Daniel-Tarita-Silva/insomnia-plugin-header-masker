@@ -21,11 +21,20 @@ function injectButtons() {
     // Avoid adding duplicate buttons
     if (toolbar.querySelector('.masking-button-container')) return;
 
+    // Create container for button
     const container = document.createElement('div');
     container.className = 'masking-button-container';
+    toolbar.appendChild(container);
 
-    // Insert the container inside the child (adjust as needed)
-    toolbar.appendChild(container); // Insert into toolbar
+    // Find all text editors inside the item
+    const textEditors = child.querySelectorAll('.editor--single-line[data-editor-type="text"]');
+
+    if (textEditors.length < 2) {
+      console.warn('Could not find both text editors.');
+      return;
+    }
+
+    const secondEditor = textEditors[1]; // Target the 2nd editor
 
     // Render the React button inside the container
     const root = ReactDOM.createRoot(container);
@@ -33,7 +42,7 @@ function injectButtons() {
         React.createElement(ToggleMaskingButton, {
           onToggle: () => {
             masked = !masked;
-            alert(`Masking is now ${masked ? 'enabled' : 'disabled'}`);
+            secondEditor.setAttribute('data-editor-type', masked ? 'password' : 'text');
           },
           masked,
         })
