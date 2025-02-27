@@ -1,23 +1,12 @@
 const React = require('react');
+const { Eye, EyeOff } = require('lucide-react'); // Install with: npm install lucide-react
 
-const ToggleMaskingButton = ({ onToggle, masked }) => {
-  return (
-    <button
-      onClick={onToggle}
-      style={{
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        background: masked ? 'blue' : 'darkgray',
-        color: 'white',
-        padding: '10px',
-        borderRadius: '5px',
-        cursor: 'pointer',
-      }}
-    >
-      {masked ? 'Disable Masking' : 'Enable Masking1'}
-    </button>
-  );
-};
+function ToggleMaskingButton({ onToggle, masked }) {
+    return (
+        <button onClick={onToggle} className="mask-toggle-button">
+            {masked ? <EyeOff size={16} /> : <Eye size={16} />}
+        </button>
+    );
+}
 
 module.exports = ToggleMaskingButton;
