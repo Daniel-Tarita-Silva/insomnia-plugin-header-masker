@@ -1,53 +1,15 @@
 const React = require('react');
 const ReactDOM = require('react-dom/client');
 const ToggleMaskingButton = require('../components/ToggleMaskingButton');
+const getCurrentRequestId = require("../utils/utils");
+const {loadMaskedState} = require("../utils/storage");
 
-// Storage key prefix
-const STORAGE_KEY_PREFIX = 'insomnia_header_masked_';
-
-// Find the currently selected request ID using the data-selected attribute
-function getCurrentRequestId() {
-    // Look for elements with data-selected="true" and get the data-key
-    const selectedRequest = document.querySelector('[id="sidebar-request-gridlist"][data-selected="true"][data-key]');
-
-    if (selectedRequest && selectedRequest.dataset.key) {
-        return selectedRequest.dataset.key; // Return the data-key value
-    }
-
-    // If no element is found with data-selected="true", fallback to other methods
-    const allRequests = document.querySelectorAll('[data-key][data-testid]');
-    for (const request of allRequests) {
-        // Check if any child elements have data-selected="true"
-        const selectedChild = request.querySelector('[data-selected="true"]');
-        if (selectedChild) {
-            return request.dataset.key;
-        }
-    }
-
-    // Ultimate fallback
-    console.warn('Could not determine current request ID, using fallback');
-    return 'unknown_request';
-}
-
-// Generate a unique ID for each header within each request
-function generateHeaderId(requestId, keyName) {
-    return `${STORAGE_KEY_PREFIX}${requestId}_${keyName.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
-}
-
-// Save masked state to localStorage
-function saveMaskedState(requestId, keyName, isMasked) {
-    const id = generateHeaderId(requestId, keyName);
-    localStorage.setItem(id, isMasked ? 'true' : 'false');
-}
-
-// Load masked state from localStorage
-function loadMaskedState(requestId, keyName) {
-    const id = generateHeaderId(requestId, keyName);
-    const value = localStorage.getItem(id);
-    return value === 'true';
-}
-
+/**
+ * Main function that injects masking buttons into the Insomnia UI
+ * Finds header rows and adds toggle buttons to each one
+ */
 function injectButtons() {
+    // Find the headers listbox in the UI which contains the headers key-value pairs
     const listbox = document.querySelector('div[role="listbox"][aria-label="Key-value pairs"]');
 
     if (!listbox) {
@@ -56,59 +18,76 @@ function injectButtons() {
         return;
     }
 
-    // Find the request ID for the current context
+    // Get the selected request ID to use in localStorage keys
     const requestId = getCurrentRequestId();
-    console.log('Current request ID:', requestId); // For debugging
+    console.log('Current request ID:', requestId); // Debug log to verify detection
 
+    // Iterated each child of the listbox (each header row)
     listbox.childNodes.forEach((child) => {
+        // Find the toolbar in this header row
         const toolbar = child.querySelector('div[role="toolbar"][aria-orientation="horizontal"]');
+
+        // Skip if toolbar not found or if we've already added a button to this toolbar
         if (!toolbar || toolbar.querySelector('.masking-button-container')) return;
 
+        // Create a container for our button
         const container = document.createElement('div');
         container.className = 'masking-button-container';
         toolbar.appendChild(container);
 
+        // Find the text editors in this header row (key and value)
         const textEditors = child.querySelectorAll('.editor--single-line[data-editor-type="text"]');
         if (textEditors.length < 2) {
             console.warn('Could not find both text editors.');
             return;
         }
 
-        // Get key and value editors
-        const keyEditor = textEditors[0];
-        const valueEditor = textEditors[1];
+        // Get references to the key and value editors
+        const headerKeyEditor = textEditors[0];
+        const headerValueEditor = textEditors[1];
 
-        // Get the header key name (for storage)
-        const keyName = keyEditor.textContent || `header_${Math.random().toString(36).substring(2, 9)}`;
+        // Get the header key name from the editor content
+        const headerKeyName = headerKeyEditor.textContent || `header_${Math.random().toString(36).substring(2, 9)}`;
 
-        // Create a custom React component to handle state internally
+        /**
+         * Custom React component to manage button state
+         * Uses React hooks for state management and re-rendering
+         */
         const MaskingButtonWrapper = () => {
-            // Use React's useState hook to create state that will trigger re-renders
-            const [isMasked, setIsMasked] = React.useState(loadMaskedState(requestId, keyName));
+            // Initialize state from localStorage, will trigger re-renders when updated
+            const [isMasked, setIsMasked] = React.useState(loadMaskedState(requestId, headerKeyName));
 
-            // Apply the initial state when component first mounts
+            // Effect to apply initial masked state when component mounts
             React.useEffect(() => {
                 if (isMasked) {
-                    valueEditor.setAttribute('data-editor-type', 'password');
+                    headerValueEditor.setAttribute('data-editor-type', 'password');
                 } else {
-                    valueEditor.setAttribute('data-editor-type', 'text');
+                    headerValueEditor.setAttribute('data-editor-type', 'text');
                 }
             }, []);
 
-            // Handle toggle with proper state updates
+            /**
+             * Handler for toggle button click
+             * Updates React state, DOM, and persists to localStorage
+             */
             const handleToggle = () => {
                 const newMaskedState = !isMasked;
+                // Update React state to trigger re-render with correct icon
                 setIsMasked(newMaskedState);
-                valueEditor.setAttribute('data-editor-type', newMaskedState ? 'password' : 'text');
-                saveMaskedState(requestId, keyName, newMaskedState);
+                // Update the editor to show/hide text
+                headerValueEditor.setAttribute('data-editor-type', newMaskedState ? 'password' : 'text');
+                // Save state to localStorage for persistence across sessions
+                saveMaskedState(requestId, headerKeyName, newMaskedState);
             };
 
+            // Render the actual toggle button component
             return React.createElement(ToggleMaskingButton, {
                 onToggle: handleToggle,
                 masked: isMasked
             });
         };
 
+        // Create a React root and render our component
         const root = ReactDOM.createRoot(container);
         root.render(React.createElement(MaskingButtonWrapper));
     });
