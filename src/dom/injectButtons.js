@@ -2,7 +2,7 @@ const React = require('react');
 const ReactDOM = require('react-dom/client');
 const ToggleMaskingButton = require('../components/ToggleMaskingButton');
 const getCurrentRequestId = require("../utils/utils");
-const {loadMaskedState} = require("../utils/storage");
+const {loadMaskedState, saveMaskedState} = require("../utils/storage");
 
 /**
  * Main function that injects masking buttons into the Insomnia UI
