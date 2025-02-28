@@ -5,28 +5,27 @@ const ToggleMaskingButton = require('../components/ToggleMaskingButton');
 // Storage key prefix
 const STORAGE_KEY_PREFIX = 'insomnia_header_masked_';
 
-// Helper to find the request ID from DOM hierarchy
-function findRequestId(element) {
-    // Look for closest parent with data-request-id attribute or similar
-    let current = element;
-    while (current && current !== document.body) {
-        const requestId = current.dataset.requestId ||
-            current.dataset.id ||
-            current.getAttribute('data-request');
+// Find the currently selected request ID using the data-selected attribute
+function getCurrentRequestId() {
+    // Look for elements with data-selected="true" and get the data-key
+    const selectedRequest = document.querySelector('[id="sidebar-request-gridlist"][data-selected="true"][data-key]');
 
-        if (requestId) {
-            return requestId;
-        }
-        current = current.parentElement;
+    if (selectedRequest && selectedRequest.dataset.key) {
+        return selectedRequest.dataset.key; // Return the data-key value
     }
 
-    // Fallback: Try to extract from URL or tab name if possible
-    const tabTitle = document.querySelector('.tabs__tab--active .tab__title');
-    if (tabTitle) {
-        return `request_${tabTitle.textContent.trim().replace(/\s+/g, '_')}`;
+    // If no element is found with data-selected="true", fallback to other methods
+    const allRequests = document.querySelectorAll('[data-key][data-testid]');
+    for (const request of allRequests) {
+        // Check if any child elements have data-selected="true"
+        const selectedChild = request.querySelector('[data-selected="true"]');
+        if (selectedChild) {
+            return request.dataset.key;
+        }
     }
 
     // Ultimate fallback
+    console.warn('Could not determine current request ID, using fallback');
     return 'unknown_request';
 }
 
@@ -58,7 +57,8 @@ function injectButtons() {
     }
 
     // Find the request ID for the current context
-    const requestId = findRequestId(listbox);
+    const requestId = getCurrentRequestId();
+    console.log('Current request ID:', requestId); // For debugging
 
     listbox.childNodes.forEach((child) => {
         const toolbar = child.querySelector('div[role="toolbar"][aria-orientation="horizontal"]');
