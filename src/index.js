@@ -2,8 +2,6 @@ const React = require('react');
 const ReactDOM = require('react-dom/client');
 const ToggleMaskingButton = require('./ToggleMaskingButton');
 
-let masked = false;
-
 function injectButtons() {
   const listbox = document.querySelector('div[role="listbox"][aria-label="Key-value pairs"]');
 
@@ -36,18 +34,32 @@ function injectButtons() {
 
     const secondEditor = textEditors[1]; // Target the 2nd editor
 
+    // Track the masking state for this specific editor
+    let localMasked = false;
+
     // Render the React button inside the container
     const root = ReactDOM.createRoot(container);
     root.render(
         React.createElement(ToggleMaskingButton, {
           onToggle: () => {
-            masked = !masked;
-            secondEditor.setAttribute('data-editor-type', masked ? 'password' : 'text');
+            localMasked = !localMasked;
+            secondEditor.setAttribute('data-editor-type', localMasked ? 'password' : 'text');
           },
-          masked,
+          masked: localMasked, // Pass the local masked state for this button
         })
     );
   });
 }
 
+// Observe changes in the DOM
+const observer = new MutationObserver(() => {
+  injectButtons(); // Re-run the function when the DOM changes
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true, // Look for changes in the entire subtree
+});
+
+// Initial call to inject the button
 setTimeout(injectButtons, 1000);
