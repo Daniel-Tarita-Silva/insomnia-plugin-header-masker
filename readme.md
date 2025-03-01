@@ -19,20 +19,10 @@ This Insomnia plugin adds a toggle button that **allows users to mask sensitive*
 ## Installation
 1. Open Insomnia.
 2. Navigate to `Preferences` > `Plugins`.
-3. Search for `insomnia-plugin-mask-headers` or go to official Insomnia [Browse Plugin Hub](https://insomnia.rest/plugins).
+3. Search for `insomnia-plugin-header-masker` or go to official Insomnia [Browse Plugin Hub](https://insomnia.rest/plugins).
 4. Click `Install Plugin`.
 5. Hit Reload Plugins or restart Insomnia if necessary.
 
-## Development
-If you want to contribute or modify the plugin:
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/insomnia-plugin-mask-headers.git
-   ```
-2. Install dependencies:
-   ```sh
-   npm install
-   ```
    
 3. Make changes to the plugin code, compile and copy the compiled code under /dist/main.js to root directory.
    ```sh

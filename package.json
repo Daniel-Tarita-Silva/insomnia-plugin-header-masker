@@ -1,19 +1,35 @@
 {
   "name": "insomnia-plugin-header-masker",
   "version": "0.0.1",
-  "private": true,
   "insomnia": {
     "name": "header-masker",
-    "description": ""
+    "description": "A plugin for masking HTTP request headers in Insomnia.",
+    "displayName": "Request Header Masker Insomnia Plugin",
+    "images": {
+      "icon": "docs/images/header-masker-icon.svg",
+      "cover": "docs/images/header-masker-icon.svg"
+    },
+
+    "publisher": {
+      "name": "Daniel Tarita da Silva"
+    },
+    "unlisted": false
   },
+
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "insomnia",
+    "plugin",
+    "header",
+    "masker",
+    "security"
+  ],
+  "author": "Daniel Tarita da Silva",
+  "license": "MIT",
+  "description": "A plugin for Insomnia to mask sensitive header values in requests for security purposes.",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "lucide-react": "^0.476.0",
