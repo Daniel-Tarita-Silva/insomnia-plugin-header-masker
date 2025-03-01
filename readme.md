@@ -7,8 +7,9 @@ This Insomnia plugin adds a toggle button that **allows users to mask sensitive*
 - **Toggle masking on/off at request level**: Easily switch between masked and unmasked values.
 - **Persistent settings**: Masking preferences are saved across sessions.
 - **User-friendly interface**: Intuitive toggle button integrated into Insomnia’s UI.
-
-![Masking Toggle](docs/images/insomnia-headers-masked.png)
+<div align="center">
+   <img src="https://github.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker/blob/main/docs/images/header-masker-icon.png" alt="Masking Toggle" width="500"/>
+</div>
 
 ## Usage
 1. Open an API request in Insomnia.
@@ -19,7 +20,7 @@ This Insomnia plugin adds a toggle button that **allows users to mask sensitive*
 ## Installation
 1. Open Insomnia.
 2. Navigate to `Preferences` > `Plugins`.
-3. Search for `insomnia-plugin-header-masker` or go to official Insomnia [Browse Plugin Hub](https://insomnia.rest/plugins).
+3. Search for `insomnia-plugin-mask-headers` or go to official Insomnia [Browse Plugin Hub](https://insomnia.rest/plugins).
 4. Click `Install Plugin`.
 5. Hit Reload Plugins or restart Insomnia if necessary.
 
@@ -27,8 +28,8 @@ This Insomnia plugin adds a toggle button that **allows users to mask sensitive*
 This project is licensed under the MIT License.
 
 ## Contributions
-Contributions are welcome! Feel free to submit issues, feature requests, or pull requests to improve the plugin.
+Contributions are welcome and appreciated! 
+Feel free to [submit issues](https://github.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker/issues), or open [pull requests](https://github.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker/pulls) to improve the plugin.
 
-## Contact
-For questions or feedback, open an issue on the GitHub repository or reach out directly.
+[Leave a ⭐️ in GitHub](https://github.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker) if you found this plugin helpful!
 

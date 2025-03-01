@@ -6,8 +6,8 @@
     "description": "A plugin for masking HTTP request headers in Insomnia.",
     "displayName": "Request Header Masker Insomnia Plugin",
     "images": {
-      "icon": "docs/images/header-masker-icon.svg",
-      "cover": "docs/images/header-masker-icon.svg"
+      "icon": "docs/images/header-masker-icon.png",
+      "cover": "docs/images/header-masker-cover.png"
     },
 
     "publisher": {
@@ -19,6 +19,10 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker.git"
   },
   "keywords": [
     "insomnia",
