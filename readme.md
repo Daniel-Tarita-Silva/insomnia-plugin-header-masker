@@ -23,13 +23,6 @@ This Insomnia plugin adds a toggle button that **allows users to mask sensitive*
 4. Click `Install Plugin`.
 5. Hit Reload Plugins or restart Insomnia if necessary.
 
-   
-3. Make changes to the plugin code, compile and copy the compiled code under /dist/main.js to root directory.
-   ```sh
-   cp dist/main.js .
-   ```
-4. Restart Insomnia and test your changes.
-
 ## License
 This project is licensed under the MIT License.
 
