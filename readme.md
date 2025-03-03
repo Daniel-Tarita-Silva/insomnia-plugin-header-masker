@@ -8,7 +8,7 @@ This Insomnia plugin adds a toggle button that **allows users to mask sensitive*
 - **Persistent settings**: Masking preferences are saved across sessions.
 - **User-friendly interface**: Intuitive toggle button integrated into Insomnia’s UI.
 <div align="center">
-   <img src="https://github.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker/blob/main/docs/images/insomnia-headers-masked.png" alt="Masking Toggle example" width="500"/>
+   <img src="https://raw.githubusercontent.com/Daniel-Tarita-Silva/insomnia-plugin-header-masker/refs/heads/main/docs/images/insomnia-headers-masked.png" alt="Masking Toggle example" width="500"/>
 </div>
 
 ## Usage
