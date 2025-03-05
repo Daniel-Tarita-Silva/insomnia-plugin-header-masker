@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-header-masker",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "insomnia": {
     "name": "header-masker",
     "description": "A plugin for masking HTTP request headers in Insomnia.",
