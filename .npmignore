@@ -1,0 +1,11 @@
+/src
+/docs
+/.babelrc
+/.eslintrc
+/.prettierrc
+/webpack.config.js
+/.gitignore
+/.git
+/node_modules
+/package-lock.json
+/yarn.lock
